@@ -6,6 +6,9 @@ export const globalStyles = globalCss({
     margin: 0,
     padding: 0,
   },
+  a: {
+    textDecoration: "none",
+  },
 
   body: {
     "-webkit-font-smoothing": "antialiased",
