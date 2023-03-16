@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 import Image from "next/image";
+import axios from "axios";
 
 interface IProduct {
   product: {
@@ -16,10 +17,28 @@ interface IProduct {
     imageUrl: string;
     price: string;
     description: string;
+    defaultPricedId: string;
   };
 }
 
 export default function Product({ product }: IProduct) {
+  const router = useRouter();
+  async function handleBuyProduct() {
+    try {
+      const response = await axios.post("/api/checkout", {
+        priceId: product.defaultPricedId,
+      });
+      const { checkoutUrl } = response.data;
+
+      //quando redireciono para rota externa, preciso usar o window.location.href
+      window.location.href = checkoutUrl;
+      //quando redireciono para rota interna, preciso usar o router.push
+      //router.push('/checkoutUrl');
+    } catch (error) {
+      //conectar com o toastify //conectar com o sentry,conectar com o DataDog
+      console.log(error);
+    }
+  }
   const { isFallback } = useRouter();
 
   if (isFallback) {
@@ -35,7 +54,7 @@ export default function Product({ product }: IProduct) {
         <h1>{product.name}</h1>
         <span>{product.price}</span>
         <p>{product.description}</p>
-        <button>Comprar agora</button>
+        <button onClick={handleBuyProduct}>Comprar agora</button>
       </ProductDetails>
     </ProductContainer>
   );
@@ -75,8 +94,9 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
           style: "currency",
           currency: "BRL",
         }).format(price.unit_amount! / 100),
+        description: product.description,
+        defaultPricedId: price.id,
       },
-      description: product.description,
     },
     revalidate: 60 * 60 * 24,
   };
