@@ -14,9 +14,13 @@ export const SuccessContainer = styled("main", {
   },
   p: {
     fontSize: "1.5rem",
+    textAlign: "center",
+    color: "#666",
   },
   a: {
     fontSize: "1.5rem",
+    fontWeight: "bold",
+    textDecoration: "none",
   },
 });
 

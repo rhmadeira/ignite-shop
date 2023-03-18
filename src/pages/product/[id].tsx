@@ -9,6 +9,7 @@ import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 import Image from "next/image";
 import axios from "axios";
+import Head from "next/head";
 
 interface IProduct {
   product: {
@@ -46,17 +47,22 @@ export default function Product({ product }: IProduct) {
   }
 
   return (
-    <ProductContainer>
-      <ImageContainer>
-        <Image src={product.imageUrl} alt="" width={530} height={480} />
-      </ImageContainer>
-      <ProductDetails>
-        <h1>{product.name}</h1>
-        <span>{product.price}</span>
-        <p>{product.description}</p>
-        <button onClick={handleBuyProduct}>Comprar agora</button>
-      </ProductDetails>
-    </ProductContainer>
+    <>
+      <Head>
+        <title>{product.name} | shop</title>
+      </Head>
+      <ProductContainer>
+        <ImageContainer>
+          <Image src={product.imageUrl} alt="" width={530} height={480} />
+        </ImageContainer>
+        <ProductDetails>
+          <h1>{product.name}</h1>
+          <span>{product.price}</span>
+          <p>{product.description}</p>
+          <button onClick={handleBuyProduct}>Comprar agora</button>
+        </ProductDetails>
+      </ProductContainer>
+    </>
   );
 }
 
